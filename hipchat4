@@ -1,0 +1,5 @@
+#! /bin/sh
+
+docker run -ti --rm --device /dev/dri \
+	-e DISPLAY=${DISPLAY} -e QT_AUTO_SCREEN_SCALE_FACTOR=1 \
+	-v /home/`id -nu`/.hipchat:/home/`id -nu` -v /tmp/.X11-unix:/tmp/.X11-unix anight/hipchat4
