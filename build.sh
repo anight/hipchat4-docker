@@ -8,4 +8,5 @@ docker build \
 	--build-arg uid=`id -u` \
 	--build-arg gid=`id -g` \
 	--build-arg video_gid=`getent group video | cut -d: -f3` \
+	--build-arg audio_gid=`getent group audio | cut -d: -f3` \
 	-t anight/hipchat4 .
