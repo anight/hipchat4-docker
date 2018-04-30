@@ -2,24 +2,22 @@
 
 set -e
 
-mkdir -p  ~/.hipchat4-docker
-
 # Set default server for first time launchers
-if [ ! -d ~/.hipchat4-docker/.config/Atlassian ] ; then
-	mkdir -p ~/.hipchat4-docker/.config/Atlassian
-	echo "force_server=https://cup1.corp.badoo.com" > ~/.hipchat4-docker/.config/Atlassian/config.ini
+if [ ! -d ~/.config/Atlassian ] ; then
+	mkdir -p ~/.config/Atlassian
+	echo "force_server=https://cup1.corp.badoo.com" > ~/.config/Atlassian/config.ini
 fi
 
 # Some magic to run hipchat maximized
-if [ -r ~/.hipchat4-docker/.config/Atlassian/HipChat.ini ] ; then
+if [ -r ~/.config/Atlassian/HipChat.ini ] ; then
 	sed -i -e 's/^windowMaximized=false$/windowMaximized=true/' \
-		~/.hipchat4-docker/.config/Atlassian/HipChat.ini
+		~/.config/Atlassian/HipChat.ini
 fi
 
 docker run -ti --rm \
 	--device /dev/dri --device /dev/snd \
 	-e DISPLAY=${DISPLAY} -e QT_AUTO_SCREEN_SCALE_FACTOR=1 \
-	-v ${HOME}/.hipchat4-docker:${HOME} \
+	-v ${HOME}:${HOME} \
 	-v /var/run/dbus:/var/run/dbus \
 	-v /tmp/.X11-unix:/tmp/.X11-unix \
 	-w ~/.config/Atlassian \
