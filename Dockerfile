@@ -4,10 +4,10 @@ RUN apt-get update
 
 RUN apt-get install -y curl gnupg apt-transport-https
 
-RUN echo "deb https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client stretch main" > /etc/apt/sources.list.d/atlassian-hipchat4.list
+RUN echo "deb https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client xenial main" > /etc/apt/sources.list.d/atlassian-hipchat4.list
 RUN curl -s https://atlassian.artifactoryonline.com/atlassian/api/gpg/key/public | apt-key add -
 
-RUN apt-get update && apt-get install -y hipchat4 libegl1-mesa libgl1-mesa-glx libgl1-mesa-dri mesa-utils
+RUN apt-get update && apt-get install -y hipchat4 libegl1-mesa libgl1-mesa-glx libgl1-mesa-dri
 
 ARG user="n/a"
 ARG group="n/a"
