@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # The lock file, because we want only one instance of HipChat
-LOCKFILE=${XDG_RUNTIME_DIR}/HipChat
+LOCKFILE=${XDG_RUNTIME_DIR}/HipChat.lock
 LOCKFD=99
 
 _lock()             { flock -$1 ${LOCKFD}; }
@@ -39,16 +39,17 @@ if [ -n "$STY" ] ; then
 	# Run the HipChat
 	docker run -ti --rm \
 		--device /dev/dri --device /dev/snd \
+		--net host --hostname docker \
 		-e DISPLAY=${DISPLAY} -e QT_AUTO_SCREEN_SCALE_FACTOR=1 \
 		-v ${HOME}:${HOME} \
 		-v /var/run/dbus:/var/run/dbus \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-w ~/.config/Atlassian \
 		anight/hipchat4 \
-		/opt/HipChat4/bin/HipChat4 $0
+		/opt/HipChat4/bin/HipChat4 $@
 
 else
 	# Run the code above in screen session
-	screen -dmS HipChat $0
+	screen -dmS HipChat $0 $@
 fi
 
