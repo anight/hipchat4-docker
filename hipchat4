@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 # The lock file, because we want only one instance of HipChat
 LOCKFILE=${XDG_RUNTIME_DIR}/HipChat.lock
@@ -24,24 +24,26 @@ if [ -n "$STY" ] ; then
 	# Set default server for first time launchers
 	if [ ! -d ~/.config/Atlassian ] ; then
 		mkdir -p ~/.config/Atlassian
-		echo "force_server=https://cup1.corp.badoo.com" > ~/.config/Atlassian/config.ini
+		echo "force_server=https://chat.corp.badoo.com" > ~/.config/Atlassian/config.ini
 	fi
 
-	# Some magic to run hipchat maximized
+	# Some magic to run hipchat maximized and with a correct hidpi zoom
 	if [ -r ~/.config/Atlassian/HipChat.ini ] ; then
 		sed -i -e 's/^windowMaximized=false$/windowMaximized=true/' \
+			-e 's/^zoomFactor=.*/zoomFactor=2.5/' \
 			~/.config/Atlassian/HipChat.ini
 	fi
 
-	# Allow local x11 apps to connect to our x11 server
-	xhost +local:
-
 	# Run the HipChat
-	docker run -ti --rm \
+	docker run -ti --rm --name hipchat4 \
 		--device /dev/dri --device /dev/snd \
 		--net host --hostname docker \
-		-e DISPLAY=${DISPLAY} -e QT_AUTO_SCREEN_SCALE_FACTOR=1 \
+		-e DISPLAY=unix${DISPLAY} \
+		-e QT_AUTO_SCREEN_SCALE_FACTOR=1 \
 		-v ${HOME}:${HOME} \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v ${HOME}/.icons/default:/usr/share/icons/Adwaita:ro \
+		-v /etc/machine-id:/etc/machine-id:ro \
 		-v /var/run/dbus:/var/run/dbus \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-w ~/.config/Atlassian \

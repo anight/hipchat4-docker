@@ -2,12 +2,12 @@ FROM ubuntu:16.04
 
 RUN apt-get update
 
-RUN apt-get install -y curl gnupg apt-transport-https
+RUN apt-get install -y --no-install-recommends wget gnupg apt-transport-https ca-certificates
 
 RUN echo "deb https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client xenial main" > /etc/apt/sources.list.d/atlassian-hipchat4.list
-RUN curl -s https://atlassian.artifactoryonline.com/atlassian/api/gpg/key/public | apt-key add -
+RUN wget -O - https://atlassian.artifactoryonline.com/atlassian/api/gpg/key/public | apt-key add -
 
-RUN apt-get update && apt-get install -y hipchat4 libegl1-mesa libgl1-mesa-glx libgl1-mesa-dri xdg-utils
+RUN apt-get update && apt-get install -y --no-install-recommends hipchat4 libegl1-mesa libgl1-mesa-glx libgl1-mesa-dri
 
 ARG user="n/a"
 ARG group="n/a"
